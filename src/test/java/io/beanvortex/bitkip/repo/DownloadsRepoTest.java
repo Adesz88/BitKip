@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DownloadsRepoTest {
 
-    @Disabled
     @Test
     void updateDownloadLocation() {
         var name = "name";
