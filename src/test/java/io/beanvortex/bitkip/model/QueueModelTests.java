@@ -21,7 +21,7 @@ public class QueueModelTests {
         Assertions.assertEquals("Teszt", queueModel.getName());
         Assertions.assertTrue(queueModel.isCanAddDownload());
 
-        queueModel = new QueueModel(
+        QueueModel queueModel2 = new QueueModel(
                 1,
                 "TesztKetto",
                 true,
@@ -33,14 +33,14 @@ public class QueueModelTests {
                 new ScheduleModel(),
                 new CopyOnWriteArrayList<DownloadModel>()
         );
-        Assertions.assertNotNull(queueModel);
-        Assertions.assertNotNull(queueModel.getName());
-        Assertions.assertEquals("TesztKetto", queueModel.getName());
-        Assertions.assertTrue(queueModel.isCanAddDownload());
-        Assertions.assertEquals(0, queueModel.getDownloads().size());
-        Assertions.assertNotNull(queueModel.getSchedule());
-        Assertions.assertTrue(queueModel.hasFolder());
-        Assertions.assertEquals("TesztKetto", queueModel.toString());
+        Assertions.assertNotNull(queueModel2);
+        Assertions.assertNotNull(queueModel2.getName());
+        Assertions.assertEquals("TesztKetto", queueModel2.getName());
+        Assertions.assertTrue(queueModel2.isCanAddDownload());
+        Assertions.assertEquals(0, queueModel2.getDownloads().size());
+        Assertions.assertNotNull(queueModel2.getSchedule());
+        Assertions.assertTrue(queueModel2.hasFolder());
+        Assertions.assertEquals("TesztKetto", queueModel2.toString());
         Assertions.assertEquals("QueueModel{" +
                 "id=" + "1" +
                 ", name='" + "TesztKetto" + '\'' +
@@ -51,6 +51,53 @@ public class QueueModelTests {
                 ", speed='" + "1" + '\'' +
                 ", simultaneouslyDownload=" + "2" +
                 ", schedule=" + "ScheduleModel(id=0, enabled=false, startTime=null, onceDownload=false, startDate=null, days=null, stopTimeEnabled=false, stopTime=null, turnOffEnabled=false, turnOffMode=null, queueId=0, startScheduler=null, stopScheduler=null)" +
-                '}', queueModel.toStringModel());
+                '}', queueModel2.toStringModel()
+        );
+
+        Assertions.assertEquals(queueModel2, queueModel2);
+        Assertions.assertNotEquals(queueModel2, null);
+        Assertions.assertNotEquals(queueModel2, "test");
+        Assertions.assertNotEquals(queueModel2, queueModel);
+        QueueModel queueModel3 = new QueueModel(
+                1,
+                "TesztKetto",
+                true,
+                true,
+                true,
+                false,
+                "1",
+                2,
+                new ScheduleModel(),
+                new CopyOnWriteArrayList<DownloadModel>()
+        );
+        Assertions.assertEquals(queueModel2, queueModel3);
+
+        queueModel3 = new QueueModel(
+                1,
+                "TesztKetto",
+                false,
+                true,
+                true,
+                false,
+                "1",
+                2,
+                new ScheduleModel(),
+                new CopyOnWriteArrayList<DownloadModel>()
+        );
+        Assertions.assertNotEquals(queueModel2, queueModel3);
+
+        queueModel3 = new QueueModel(
+                1,
+                "TesztKetto",
+                true,
+                false,
+                true,
+                false,
+                "1",
+                2,
+                new ScheduleModel(),
+                new CopyOnWriteArrayList<DownloadModel>()
+        );
+        Assertions.assertNotEquals(queueModel2, queueModel3);
     }
 }
