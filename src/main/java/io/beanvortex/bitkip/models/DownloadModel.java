@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Getter
@@ -153,7 +154,7 @@ public class DownloadModel {
         var showCompleteDialog = rs.getBoolean(COL_SHOW_COMPLETE_DIALOG);
         var openAfterComplete = rs.getBoolean(COL_OPEN_AFTER_COMPLETE);
         var resumable = rs.getBoolean(COL_RESUMABLE);
-        var turnOffMode = TurnOffMode.valueOf(rs.getString(COL_TURNOFF_MODE));
+        var turnOffMode = TurnOffMode.getValue(rs.getString(COL_TURNOFF_MODE));
         var addDate = rs.getString(COL_ADD_DATE);
         var addDateStr = LocalDateTime.parse(addDate);
         var addToQueueDate = rs.getString(COL_ADD_TO_QUEUE_DATE);

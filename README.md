@@ -1,3 +1,9 @@
+# Futtatás javafx module problémával
+- Töltsd le a javafx package-t [innen](https://gluonhq.com/products/javafx/)
+- Csomagold ki valahova
+- Add hozzá a vm options-ként a futtatási konfigban, pl: ```--module-path "C:\javageci\javafx-sdk-21.0.7\lib" --add-modules javafx.controls,javafx.fxml```
+
+
 # BitKip
 ### Free download manager for desktop 
 

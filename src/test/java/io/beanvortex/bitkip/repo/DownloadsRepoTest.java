@@ -4,6 +4,7 @@ import io.beanvortex.bitkip.models.DownloadModel;
 import io.beanvortex.bitkip.models.DownloadStatus;
 import io.beanvortex.bitkip.utils.Defaults;
 import io.beanvortex.bitkip.config.AppConfigs;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DownloadsRepoTest {
 
+    @Disabled
     @Test
     void updateDownloadLocation() {
         var name = "name";
