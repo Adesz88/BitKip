@@ -22,10 +22,7 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Executors;
 
 import static io.beanvortex.bitkip.BitKip.getResource;
@@ -90,6 +87,11 @@ public class FxUtils {
             stage.show();
         } catch (IOException e) {
             log.error(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            //System.out.println(e.getStackTrace());
+            log.error(e.getMessage());
+            log.error(Arrays.toString(e.getStackTrace()));
         }
     }
 
