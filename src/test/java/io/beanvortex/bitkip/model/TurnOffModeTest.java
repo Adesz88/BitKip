@@ -14,4 +14,19 @@ public class TurnOffModeTest {
         turnOffMode = TurnOffMode.TURN_OFF;
         Assertions.assertEquals("TURN_OFF", turnOffMode.toString());
     }
+
+    @Test
+    public void testGetValue() {
+        var mode = TurnOffMode.getValue(null);
+        Assertions.assertEquals(TurnOffMode.NOTHING, mode);
+
+        mode = TurnOffMode.getValue("");
+        Assertions.assertEquals(TurnOffMode.NOTHING, mode);
+
+        mode = TurnOffMode.getValue("null");
+        Assertions.assertEquals(TurnOffMode.NOTHING, mode);
+
+        mode = TurnOffMode.getValue("SLEEP");
+        Assertions.assertEquals(TurnOffMode.SLEEP, mode);
+    }
 }

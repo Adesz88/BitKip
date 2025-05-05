@@ -32,5 +32,8 @@ public class FileTypeTests {
         AppConfigs.initPaths();
         FileType fileType = FileType.determineFileType("teszt.zip");
         Assertions.assertEquals(FileType.COMPRESSED, fileType);
+
+        fileType = FileType.determineFileType("test");
+        Assertions.assertEquals(FileType.OTHER, fileType);
     }
 }
