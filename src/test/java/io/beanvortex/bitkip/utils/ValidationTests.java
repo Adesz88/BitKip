@@ -1,8 +1,10 @@
 package io.beanvortex.bitkip.utils;
 
+import io.beanvortex.bitkip.config.AppConfigs;
 import io.beanvortex.bitkip.models.DownloadModel;
 import io.beanvortex.bitkip.models.DownloadStatus;
 import io.beanvortex.bitkip.repo.QueuesRepo;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -31,12 +33,14 @@ public class ValidationTests {
 
     @Test
     public void testMaxChunks(){
+        int cpu = Runtime.getRuntime().availableProcessors();
         Assertions.assertEquals(0, Validations.maxChunks(1_999_999));
-        Assertions.assertEquals(Runtime.getRuntime().availableProcessors(), Validations.maxChunks(2_000_000));
+        Assertions.assertEquals(cpu < 10 ? cpu*2 : cpu , Validations.maxChunks(2_000_000));
     }
 
     @Test
-    public void testFillNotFetchedData() throws IOException {
+    @SneakyThrows
+    public void testFillNotFetchedData() {
         DownloadModel dm = DownloadModel.builder()
                 .name("teszt").progress(0).downloaded(0).size(1254631)
                 .uri(UUID.randomUUID().toString()).filePath(downloadPath + "test")
@@ -49,5 +53,25 @@ public class ValidationTests {
         DownloadModel original = dm;
         Validations.fillNotFetchedData(dm);
         Assertions.assertEquals(original, dm);
+    }
+
+    @Test
+    public void testQueueDoesNotExist() {
+        AppConfigs.initLogger();
+        
+        
+        Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> DownloadModel.builder()
+                .name("teszt").progress(0).downloaded(0).size(1254631)
+                .uri(UUID.randomUUID().toString()).filePath(downloadPath + "test")
+                .chunks(8).addDate(LocalDateTime.now()).addToQueueDate(LocalDateTime.now())
+                .lastTryDate(LocalDateTime.now()).completeDate(LocalDateTime.now())
+                .queues(new CopyOnWriteArrayList<>(List.of(QueuesRepo.findByName("gasgvas", false))))
+                .openAfterComplete(false).showCompleteDialog(false).downloadStatus(DownloadStatus.Paused)
+                .resumable(true)
+                .build());
+        String errorMessage = exception.getMessage();
+        String expectedMessage = "Queue does not exist";
+        
+        Assertions.assertTrue(expectedMessage.equals(errorMessage));
     }
 }

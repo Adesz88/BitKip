@@ -2,6 +2,8 @@ package io.beanvortex.bitkip.task;
 
 import io.beanvortex.bitkip.config.AppConfigs;
 import io.beanvortex.bitkip.models.DownloadModel;
+import java.nio.file.NoSuchFileException;
+import javafx.application.Platform;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -54,10 +56,11 @@ public class SpecialDownloadTaskTest {
 
         Assertions.assertTrue(actualMessage.equals(expectedMessage));
     }
-
+    
     @Test
     @SneakyThrows
-    public void fail_ifUriIsAbsolute() {
+    public void fail_ifToolkitNotInitialized()
+    {
         //arrange / given
         new File("test/.temp/null#0").createNewFile();
         DownloadModel downloadModel = new DownloadModel();
@@ -66,12 +69,58 @@ public class SpecialDownloadTaskTest {
         //act / when
         //assert / then
         SpecialDownloadTask special = new SpecialDownloadTask(downloadModel);
-//        special.call();
         Exception exception = Assertions.assertThrows(IllegalStateException.class, special::call);
-
+        
         String expectedMessage = "Toolkit not initialized";
         String actualMessage = exception.getMessage();
         Assertions.assertTrue(actualMessage.equals(expectedMessage));
+    }
+    
+    @Test
+    @SneakyThrows
+    public void fail_ifFileDoesNotExist()
+    {
+        try
+        {
+            Platform.startup(() ->
+            {});
+        }
+        catch (IllegalStateException e)
+        {
+            // After the second start it will throw an exception
+        }
+        //arrange / given
+        new File("test/.temp/null#0").createNewFile();
+        DownloadModel downloadModel = new DownloadModel();
+        downloadModel.setFilePath("test/test.txt");
+        downloadModel.setUri("C:/Users/david/IdeaProjects/BitKip/src/main/resources/io/beanvortex/bitkip/icons/drag-and-drop-dark.png");
+        //act / when
+        //assert / then
+        SpecialDownloadTask special = new SpecialDownloadTask(downloadModel);
+        Exception exception = Assertions.assertThrows(NoSuchFileException.class, special::call);
+        
+        String expectedMessage = "test\\test.txt";
+        String actualMessage = exception.getMessage();
+        Assertions.assertTrue(actualMessage.equals(expectedMessage));
+        
+    }
+    
+    @Test
+    @SneakyThrows
+    public void fail_ifTest()
+    {
+        Platform.startup(() -> {});
+        //arrange / given
+        new File("test/.temp/null#0").createNewFile();
+        DownloadModel downloadModel = new DownloadModel();
+        downloadModel.setFilePath("test/valid.txt");
+        downloadModel.setUri("C:/Users/david/IdeaProjects/BitKip/src/main/resources/io/beanvortex/bitkip/icons/drag-and-drop-dark.png");
+        //act / when
+        //assert / then
+        SpecialDownloadTask special = new SpecialDownloadTask(downloadModel);
+        Long fileSize = special.call();
+        Assertions.assertTrue(fileSize > 0);
+        Assertions.assertEquals(21, fileSize); //string length
     }
 
     @BeforeEach

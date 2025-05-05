@@ -1,6 +1,7 @@
 package io.beanvortex.bitkip.controllers;
 
 import io.beanvortex.bitkip.BitKip;
+import io.beanvortex.bitkip.config.AppConfigs;
 import io.beanvortex.bitkip.utils.FxUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,23 +19,25 @@ import org.testfx.framework.junit5.Start;
 import java.io.IOException;
 
 @ExtendWith(ApplicationExtension.class)
-@Disabled
 public class AboutControllerTest extends ApplicationTest {
 
     Scene scene;
+    AboutController aboutController;
 
     @Start
     public void start(Stage stage) throws Exception
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(BitKip.class.getResource("about" + ".fxml"));
-        Object root = fxmlLoader.load();
-        Parent parent = (Parent) root;
+        AppConfigs.initLogger();
+        FXMLLoader fxmlLoader = new FXMLLoader(BitKip.class.getResource("/io/beanvortex/bitkip/fxml/about" + ".fxml"));
+        Parent root = fxmlLoader.load();
+        aboutController = fxmlLoader.getController();
 
-        scene = new Scene(parent, 640, 480);
+        scene = new Scene(root, 640, 480);
 
         System.out.println(scene);
 
         stage.setScene(scene);
+        aboutController.setStage(stage);
         stage.show();
         stage.toFront();
 
@@ -42,6 +45,13 @@ public class AboutControllerTest extends ApplicationTest {
 
     @Test
     public void test() {
-        System.out.println(scene);
+        clickOn("#checkForUpdateBtn");
+        Assertions.assertNotNull(aboutController.getStage());
+    }
+
+    @Test
+    @Disabled
+    public void test2() {
+        clickOn("#linkGit");
     }
 }
