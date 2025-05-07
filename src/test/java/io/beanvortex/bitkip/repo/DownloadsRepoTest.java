@@ -6,10 +6,14 @@ import io.beanvortex.bitkip.utils.Defaults;
 import io.beanvortex.bitkip.config.AppConfigs;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -47,5 +51,58 @@ class DownloadsRepoTest {
         assertEquals(newPath + name, fetchedDm.getFilePath());
 
         DownloadsRepo.deleteDownload(dm);
+    }
+
+    @Test
+    public void testUpdateDownloadOpenAfterComplete() {
+        MockedStatic<DatabaseHelper> mocked = Mockito.mockStatic(DatabaseHelper.class);
+        DownloadModel downloadModel = new DownloadModel();
+
+        downloadModel.setOpenAfterComplete(true);
+        DownloadsRepo.updateDownloadOpenAfterComplete(downloadModel);
+        mocked.verify(() -> DatabaseHelper.runSQL("UPDATE downloads SET open_after_complete = 1 WHERE id = 0;\n", false));
+
+        downloadModel.setOpenAfterComplete(false);
+        DownloadsRepo.updateDownloadOpenAfterComplete(downloadModel);
+        mocked.verify(() -> DatabaseHelper.runSQL("UPDATE downloads SET open_after_complete = 0 WHERE id = 0;\n", false));
+
+        mocked.close();
+    }
+
+    @Test
+    public void testUpdateDownloadShowCompleteDialog() {
+        MockedStatic<DatabaseHelper> mocked = Mockito.mockStatic(DatabaseHelper.class);
+        DownloadModel downloadModel = new DownloadModel();
+
+        downloadModel.setShowCompleteDialog(true);
+        DownloadsRepo.updateDownloadShowCompleteDialog(downloadModel);
+        mocked.verify(() -> DatabaseHelper.runSQL("UPDATE downloads SET show_complete_dialog = 1 WHERE id = 0;\n", false));
+
+        downloadModel.setShowCompleteDialog(false);
+        DownloadsRepo.updateDownloadShowCompleteDialog(downloadModel);
+        mocked.verify(() -> DatabaseHelper.runSQL("UPDATE downloads SET show_complete_dialog = 0 WHERE id = 0;\n", false));
+
+        mocked.close();
+    }
+
+    @Test
+    public void testUpdateTableStatus() {
+        MockedStatic<DatabaseHelper> mocked = Mockito.mockStatic(DatabaseHelper.class);
+        DownloadModel downloadModel = new DownloadModel();
+
+        downloadModel.setLastTryDate(null);
+        downloadModel.setCompleteDate(null);
+        DownloadsRepo.updateTableStatus(downloadModel);
+        mocked.verify(() -> DatabaseHelper.runSQL("UPDATE downloads SET progress = 0.000000, downloaded = 0, complete_date = NULL,\n" +
+                "    last_try_date = NULL WHERE id = 0\n", false));
+
+        LocalDateTime dateTime = LocalDate.of(2025, 5, 7).atStartOfDay();
+        downloadModel.setLastTryDate(dateTime);
+        downloadModel.setCompleteDate(dateTime);
+        DownloadsRepo.updateTableStatus(downloadModel);
+        mocked.verify(() -> DatabaseHelper.runSQL("UPDATE downloads SET progress = 0.000000, downloaded = 0, complete_date = \"2025-05-07T00:00\",\n" +
+                "    last_try_date = \"2025-05-07T00:00\" WHERE id = 0\n", false));
+
+        mocked.close();
     }
 }
