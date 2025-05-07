@@ -1,6 +1,5 @@
 package io.beanvortex.bitkip.repo;
 
-import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
 import io.beanvortex.bitkip.config.AppConfigs;
@@ -9,6 +8,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ch.qos.logback.classic.Logger;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
@@ -75,7 +76,7 @@ public class DatabaseHelperTest {
     }
 
     @Test
-    public void testupdateCols() {
+    public void testUpdateColsException() {
         String[] columns = {""};
         String[] values = {"", ""};
         Exception exception = Assertions.assertThrows(
@@ -91,5 +92,32 @@ public class DatabaseHelperTest {
         Assertions.assertDoesNotThrow(
                 () -> DatabaseHelper.updateCols(columns, columns, "", 1)
         );
+    }
+
+    @Test
+    public void testUpdateCols() {
+        String[] columns = {"id", "name", "admin"};
+        String[] values = {"1", "a", "NULL"};
+        MockedStatic<DatabaseHelper> mocked = Mockito.mockStatic(DatabaseHelper.class, Mockito.CALLS_REAL_METHODS);
+
+        DatabaseHelper.updateCols(columns, values, "user", 1);
+        mocked.verify(() -> DatabaseHelper.runSQL("UPDATE user SET id=1,name=\"a\",admin=NULL WHERE id=1;", false));
+
+        mocked.close();
+    }
+
+    @Test
+    public void testUpdateCol() {
+        MockedStatic<DatabaseHelper> mocked = Mockito.mockStatic(DatabaseHelper.class, Mockito.CALLS_REAL_METHODS);
+        DatabaseHelper.updateCol("id", "1", "user", 1);
+        mocked.verify(() -> DatabaseHelper.runSQL("UPDATE user SET id=1 WHERE id=1;\n", false));
+
+        DatabaseHelper.updateCol("id", "a", "user", 1);
+        mocked.verify(() -> DatabaseHelper.runSQL("UPDATE user SET id=1 WHERE id=1;\n", false));
+
+        DatabaseHelper.updateCol("id", "NULL", "user", 1);
+        mocked.verify(() -> DatabaseHelper.runSQL("UPDATE user SET id=1 WHERE id=1;\n", false));
+
+        mocked.close();
     }
 }
