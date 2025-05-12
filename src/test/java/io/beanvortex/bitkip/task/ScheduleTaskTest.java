@@ -28,7 +28,7 @@ public class ScheduleTaskTest {
         schedule.setStartTime(LocalTime.of(20, 44));
         schedule.setStopTime(LocalTime.of(19, 0));
         delay = (long) calculateOnceInitialDelay.invoke(null,true, schedule);
-        Assertions.assertNotEquals(0, delay);
+        Assertions.assertEquals(0, delay);
     }
 
     @Test
