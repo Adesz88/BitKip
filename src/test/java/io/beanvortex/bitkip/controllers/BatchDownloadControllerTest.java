@@ -68,7 +68,7 @@ public class BatchDownloadControllerTest extends ApplicationTest
 		clickOn("#urlField").write(s);
 		clickOn("#startField").type(KeyCode.DIGIT1);
 		clickOn("#endField").type(KeyCode.DIGIT2);
-		clickOn("#endField");
+		clickOn("#startField");
 		FxAssert.verifyThat("#checkBtn", NodeMatchers.isEnabled());
 		clickOn("#checkBtn");
 	}

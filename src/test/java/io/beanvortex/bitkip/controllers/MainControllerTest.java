@@ -31,7 +31,7 @@ public class MainControllerTest extends ApplicationTest
 		Parent root = fxmlLoader.load();
 		main = fxmlLoader.getController();
 		
-		scene = new Scene(root, 640, 480);
+		scene = new Scene(root, 1280, 960);
 		
 		System.out.println(scene);
 		
@@ -49,5 +49,11 @@ public class MainControllerTest extends ApplicationTest
 		for(String element : elements){
 			clickOn((Node)lookup(LabeledMatchers.hasText(element)).query());
 		}
+	}
+	
+	@Test
+	public void testNewData(){
+		clickOn("#newDownloadBtn");
+		
 	}
 }

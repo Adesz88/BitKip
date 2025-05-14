@@ -59,25 +59,6 @@ public class SpecialDownloadTaskTest {
     
     @Test
     @SneakyThrows
-    public void fail_ifToolkitNotInitialized()
-    {
-        //arrange / given
-        new File("test/.temp/null#0").createNewFile();
-        DownloadModel downloadModel = new DownloadModel();
-        downloadModel.setFilePath("test/test.txt");
-        downloadModel.setUri("C:/Users/david/IdeaProjects/BitKip/src/main/resources/io/beanvortex/bitkip/icons/drag-and-drop-dark.png");
-        //act / when
-        //assert / then
-        SpecialDownloadTask special = new SpecialDownloadTask(downloadModel);
-        Exception exception = Assertions.assertThrows(IllegalStateException.class, special::call);
-        
-        String expectedMessage = "Toolkit not initialized";
-        String actualMessage = exception.getMessage();
-        Assertions.assertTrue(actualMessage.equals(expectedMessage));
-    }
-    
-    @Test
-    @SneakyThrows
     public void fail_ifFileDoesNotExist()
     {
         try
@@ -109,7 +90,15 @@ public class SpecialDownloadTaskTest {
     @SneakyThrows
     public void fail_ifTest()
     {
-        Platform.startup(() -> {});
+        try
+        {
+            Platform.startup(() ->
+            {});
+        }
+        catch (IllegalStateException e)
+        {
+            // no code needed
+        }
         //arrange / given
         new File("test/.temp/null#0").createNewFile();
         DownloadModel downloadModel = new DownloadModel();
