@@ -53,6 +53,23 @@ public class QueueModelTests {
                 ", schedule=" + "ScheduleModel(id=0, enabled=false, startTime=null, onceDownload=false, startDate=null, days=null, stopTimeEnabled=false, stopTime=null, turnOffEnabled=false, turnOffMode=null, queueId=0, startScheduler=null, stopScheduler=null)" +
                 '}', queueModel2.toStringModel()
         );
+    }
+
+    @Test
+    public void testQueueModel2() {
+        QueueModel queueModel = new QueueModel("Teszt", true);
+        QueueModel queueModel2 = new QueueModel(
+                1,
+                "TesztKetto",
+                true,
+                true,
+                true,
+                false,
+                "1",
+                2,
+                new ScheduleModel(),
+                new CopyOnWriteArrayList<DownloadModel>()
+        );
 
         Assertions.assertEquals(queueModel2, queueModel2);
         Assertions.assertNotEquals(queueModel2, null);
