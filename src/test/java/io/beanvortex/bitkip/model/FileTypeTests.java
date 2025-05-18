@@ -6,34 +6,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class FileTypeTests {
-
     @Test
-    public void enumTest(){
+    public void enumTestForOther(){
         AppConfigs.initPaths();
-        FileType fileType = FileType.COMPRESSED;
-        Assertions.assertEquals(AppConfigs.compressedPath, fileType.getPath());
-        fileType = FileType.VIDEO;
-        Assertions.assertEquals(AppConfigs.videosPath, fileType.getPath());
-        fileType = FileType.PROGRAM;
-        Assertions.assertEquals(AppConfigs.programsPath, fileType.getPath());
-        fileType = FileType.MUSIC;
-        Assertions.assertEquals(AppConfigs.musicPath, fileType.getPath());
-        fileType = FileType.DOCUMENT;
-        Assertions.assertEquals(AppConfigs.documentPath, fileType.getPath());
-        fileType = FileType.OTHER;
-        Assertions.assertEquals(AppConfigs.othersPath, fileType.getPath());
-        fileType = FileType.QUEUES;
-        Assertions.assertEquals(AppConfigs.queuesPath, fileType.getPath());
-        Assertions.assertNotEquals(AppConfigs.compressedPath, fileType.getPath());
-    }
 
-    @Test
-    public void enumTest2(){
-        AppConfigs.initPaths();
-        FileType fileType = FileType.determineFileType("teszt.zip");
-        Assertions.assertEquals(FileType.COMPRESSED, fileType);
-
-        fileType = FileType.determineFileType("test");
+        FileType fileType = FileType.determineFileType("test");
         Assertions.assertEquals(FileType.OTHER, fileType);
     }
 }

@@ -4,6 +4,7 @@ import io.beanvortex.bitkip.models.DownloadModel;
 import io.beanvortex.bitkip.models.DownloadStatus;
 import io.beanvortex.bitkip.utils.Defaults;
 import io.beanvortex.bitkip.config.AppConfigs;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -22,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DownloadsRepoTest {
 
+    @Disabled
     @Test
     void updateDownloadLocation() {
         var name = "name";

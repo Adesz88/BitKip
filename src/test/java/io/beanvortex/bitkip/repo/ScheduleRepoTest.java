@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class ScheduleRepoTest {
+
     @Test
     public void testValidScheduleProperties() {
         ScheduleModel schedule = new ScheduleModel();
@@ -31,14 +32,18 @@ public class ScheduleRepoTest {
         Assertions.assertEquals("\"20:15\"", properties.get("stop_time"));
         Assertions.assertEquals("\"NOTHING\"", properties.get("turn_off_mode"));
         Assertions.assertEquals("\"WEDNESDAY\"", properties.get("days"));
+    }
 
+    @Test
+    public void testValidSchedulePropertiesWithNull() {
+        ScheduleModel schedule = new ScheduleModel();
         schedule.setStartTime(null);
         schedule.setStartDate(null);
         schedule.setStopTime(null);
         schedule.setTurnOffMode(null);
         schedule.setDays(null);
 
-        properties = ScheduleRepo.validScheduleProperties(schedule);
+        Map<String, String> properties = ScheduleRepo.validScheduleProperties(schedule);
         Assertions.assertEquals("NULL", properties.get("start_time"));
         Assertions.assertEquals("NULL", properties.get("start_date"));
         Assertions.assertEquals("NULL", properties.get("stop_time"));

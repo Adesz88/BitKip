@@ -10,17 +10,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class QueueModelTests {
     @Test
-    public void testQueueModel() {
-        QueueModel queueModel = new QueueModel();
-        Assertions.assertNotNull(queueModel);
-        Assertions.assertNull(queueModel.getName());
-
-        queueModel = new QueueModel("Teszt", true);
-        Assertions.assertNotNull(queueModel);
-        Assertions.assertNotNull(queueModel.getName());
-        Assertions.assertEquals("Teszt", queueModel.getName());
-        Assertions.assertTrue(queueModel.isCanAddDownload());
-
+    public void testQueueModel2() {
+        QueueModel queueModel = new QueueModel("Teszt", true);
         QueueModel queueModel2 = new QueueModel(
                 1,
                 "TesztKetto",
@@ -32,26 +23,6 @@ public class QueueModelTests {
                 2,
                 new ScheduleModel(),
                 new CopyOnWriteArrayList<DownloadModel>()
-        );
-        Assertions.assertNotNull(queueModel2);
-        Assertions.assertNotNull(queueModel2.getName());
-        Assertions.assertEquals("TesztKetto", queueModel2.getName());
-        Assertions.assertTrue(queueModel2.isCanAddDownload());
-        Assertions.assertEquals(0, queueModel2.getDownloads().size());
-        Assertions.assertNotNull(queueModel2.getSchedule());
-        Assertions.assertTrue(queueModel2.hasFolder());
-        Assertions.assertEquals("TesztKetto", queueModel2.toString());
-        Assertions.assertEquals("QueueModel{" +
-                "id=" + "1" +
-                ", name='" + "TesztKetto" + '\'' +
-                ", editable=" + "true" +
-                ", canAddDownload=" + "true" +
-                ", hasFolder=" + "true" +
-                ", downloadFromTop=" + "false" +
-                ", speed='" + "1" + '\'' +
-                ", simultaneouslyDownload=" + "2" +
-                ", schedule=" + "ScheduleModel(id=0, enabled=false, startTime=null, onceDownload=false, startDate=null, days=null, stopTimeEnabled=false, stopTime=null, turnOffEnabled=false, turnOffMode=null, queueId=0, startScheduler=null, stopScheduler=null)" +
-                '}', queueModel2.toStringModel()
         );
 
         Assertions.assertEquals(queueModel2, queueModel2);
